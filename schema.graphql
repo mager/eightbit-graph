@@ -1,6 +1,25 @@
-type ExampleEntity @entity {
+type _Schema_
+  @fulltext(
+    name: "tokenSearch"
+    language: en
+    algorithm: rank
+    include: [{
+      entity: "Token",
+      fields: []
+    }]
+  )
+
+type Token @entity {
   id: ID!
-  count: BigInt!
-  owner: Bytes! # address
-  approved: Bytes! # address
+  tokenID: BigInt!
+  createdAtTimestamp: BigInt!
+  updatedAtTimestamp: BigInt
+  creator: User!
+  owner: User!
+}
+
+type User @entity {
+  id: ID!
+  tokens: [Token!]! @derivedFrom(field: "owner")
+  created: [Token!]! @derivedFrom(field: "creator")
 }
